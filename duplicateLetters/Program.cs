@@ -15,8 +15,11 @@ class Program
     static void Main()
     {
         string filePath = "C:\\Users\\Christopher\\Documents\\raizen\\doc.docx";
+        string filePathCopy = "C:\\Users\\Christopher\\Documents\\raizen\\doc_copy.docx";
 
-        DuplicateBlock(filePath, 2);
+        CopyFile(filePath, filePathCopy);
+
+        DuplicateBlock(filePathCopy, 2);
 
         Console.WriteLine("Bloco duplicado com sucesso no mesmo arquivo!");
     }
@@ -48,6 +51,26 @@ class Program
                 }
 
             }
+        }
+    }
+
+    static void CopyFile(string fileOrigin, string fileDestiny)
+    {
+        try
+        {
+            using (FileStream fsOrigin = new FileStream(fileOrigin, FileMode.Open, FileAccess.Read))
+            using (FileStream fsDestiny = new FileStream(fileDestiny, FileMode.Create, FileAccess.Write))
+            {
+                fsOrigin.CopyTo(fsDestiny);
+            }
+        }
+        catch (IOException ex)
+        {
+            Console.WriteLine($"Erro ao copiar arquivo: {ex.Message}");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Erro geral: {ex.Message}");
         }
     }
 
