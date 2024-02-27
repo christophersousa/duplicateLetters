@@ -8,6 +8,7 @@ using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Drawing.Charts;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Wordprocessing;
+using duplicateLetters.model;
 using Newtonsoft.Json;
 
 class Program
@@ -17,14 +18,18 @@ class Program
         string filePath = "C:\\Users\\Christopher\\Documents\\raizen\\doc.docx";
         string filePathCopy = "C:\\Users\\Christopher\\Documents\\raizen\\doc_copy.docx";
 
+        string jsonContent = File.ReadAllText("C:\\Users\\Christopher\\Documents\\raizen\\data.json");
+
+        var dataJson = JsonConvert.DeserializeObject<DataJson>(jsonContent);
+
         File.Copy(filePath, filePathCopy, true);
 
-        DuplicateBlock(filePathCopy, 2);
+        DuplicateBlock(filePathCopy, dataJson);
 
         Console.WriteLine("Bloco duplicado com sucesso no mesmo arquivo!");
     }
 
-    static void DuplicateBlock(string filePath, int numberOfCopies)
+    static void DuplicateBlock(string filePath, DataJson dataJson)
     {
         using (WordprocessingDocument doc = WordprocessingDocument.Open(filePath, true))
         {
@@ -41,7 +46,7 @@ class Program
                     .Where(el => el != startParagraph && el != endParagraph)
                     .ToList();
 
-                for (int i = 0; i < numberOfCopies; i++)
+                for (int i = 0; i < dataJson.Periodo.Count; i++)
                 {
                     var clonedElements = elementsToDuplicate.Select(el => CloneElement(el)).ToList();
 
