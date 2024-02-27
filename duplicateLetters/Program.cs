@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -33,6 +34,13 @@ class Program
     {
         using (WordprocessingDocument doc = WordprocessingDocument.Open(filePath, true))
         {
+            Dictionary<string, string> dictGeneral = new Dictionary<string, string>
+                    {
+                        {"@nomedapessoa", dataJson.Nomedapessoa},
+                        {"@DATADEADMISSÃO", dataJson.Datadeadmissao},
+                        {"@nomedogestor", dataJson.Gestor}
+                    };
+            ReplaceMarking(doc, dictGeneral);
             Body body = doc.MainDocumentPart.Document.Body;
 
             var startParagraph = body.Elements<Paragraph>().FirstOrDefault(para => para.InnerText.Contains("@start"));
@@ -48,6 +56,13 @@ class Program
 
                 for (int i = 0; i < dataJson.Periodo.Count; i++)
                 {
+                    Dictionary<string, string> dictPeriod = new Dictionary<string, string>
+                    {
+                        {"@period", $"Período {i}"},
+                        {"@CARGODAPESSOA", dataJson.Periodo[i].Data},
+                        {"@AREADAEMPRESA", dataJson.Periodo[i].Nome}
+                    };
+
                     var clonedElements = elementsToDuplicate.Select(el => CloneElement(el)).ToList();
 
                     // Created page
@@ -61,6 +76,20 @@ class Program
                     {
                         body.InsertBefore(clonedElement, endParagraph);
                     }
+                }
+            }
+        }
+    }
+
+    static void ReplaceMarking(WordprocessingDocument documento, Dictionary<string, string> dictGeneral)
+    {
+        foreach (var texto in documento.MainDocumentPart.Document.Descendants<Text>())
+        {
+            foreach (var item in dictGeneral)
+            {
+                if (texto.Text.Contains(item.Key))
+                {
+                    texto.Text = texto.Text.Replace(item.Key, item.Value);
                 }
 
             }
