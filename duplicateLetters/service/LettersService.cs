@@ -59,11 +59,16 @@ namespace duplicateLetters.service
 
                         var clonedElements = elementsToDuplicate.Select(el => ReplaceAndCloneElement(el, dictPeriod)).ToList();
 
-                        // Created page
-                        Paragraph pageSeparator = new Paragraph(new Run(new Break() { Type = BreakValues.Page }));
+                        if(i > 0)
+                        {
+                            // Created page
+                            Paragraph pageSeparator = new Paragraph(new Run(new Break() { Type = BreakValues.Page }));
 
-                        // Insert the page separator before the endParagraph
-                        body.InsertBefore(pageSeparator, endParagraph);
+                            // Insert the page separator before the endParagraph
+                            body.InsertBefore(pageSeparator, endParagraph);
+
+                        }
+
 
 
                         foreach (var clonedElement in clonedElements)
