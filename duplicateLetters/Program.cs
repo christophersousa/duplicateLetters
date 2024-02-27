@@ -38,6 +38,7 @@ class Program
                 var elementsToDuplicate = body.Elements()
                     .SkipWhile(el => el != startParagraph)
                     .TakeWhile(el => el != endParagraph)
+                    .Where(el => el != startParagraph && el != endParagraph)
                     .ToList();
 
                 for (int i = 0; i < numberOfCopies; i++)
