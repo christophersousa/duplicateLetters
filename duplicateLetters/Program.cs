@@ -17,7 +17,7 @@ class Program
         string filePath = "C:\\Users\\Christopher\\Documents\\raizen\\doc.docx";
         string filePathCopy = "C:\\Users\\Christopher\\Documents\\raizen\\doc_copy.docx";
 
-        CopyFile(filePath, filePathCopy);
+        File.Copy(filePath, filePathCopy, true);
 
         DuplicateBlock(filePathCopy, 2);
 
@@ -52,26 +52,6 @@ class Program
                 }
 
             }
-        }
-    }
-
-    static void CopyFile(string fileOrigin, string fileDestiny)
-    {
-        try
-        {
-            using (FileStream fsOrigin = new FileStream(fileOrigin, FileMode.Open, FileAccess.Read))
-            using (FileStream fsDestiny = new FileStream(fileDestiny, FileMode.Create, FileAccess.Write))
-            {
-                fsOrigin.CopyTo(fsDestiny);
-            }
-        }
-        catch (IOException ex)
-        {
-            Console.WriteLine($"Erro ao copiar arquivo: {ex.Message}");
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Erro geral: {ex.Message}");
         }
     }
 
