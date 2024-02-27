@@ -45,6 +45,13 @@ class Program
                 {
                     var clonedElements = elementsToDuplicate.Select(el => CloneElement(el)).ToList();
 
+                    // Created page
+                    Paragraph pageSeparator = new Paragraph(new Run(new Break() { Type = BreakValues.Page }));
+
+                    // Insert the page separator before the endParagraph
+                    body.InsertBefore(pageSeparator, endParagraph);
+
+
                     foreach (var clonedElement in clonedElements)
                     {
                         body.InsertBefore(clonedElement, endParagraph);
