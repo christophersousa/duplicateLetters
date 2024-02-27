@@ -58,12 +58,12 @@ class Program
                 {
                     Dictionary<string, string> dictPeriod = new Dictionary<string, string>
                     {
-                        {"@period", $"Período {i}"},
-                        {"@CARGODAPESSOA", dataJson.Periodo[i].Data},
-                        {"@AREADAEMPRESA", dataJson.Periodo[i].Nome}
+                        {"@period", $"Período {i +1}"},
+                        {"@AREADAEMPRESA", dataJson.Periodo[i].Nome},
+                        {"@CARGODAPESSOA", dataJson.Periodo[i].Data}
                     };
 
-                    var clonedElements = elementsToDuplicate.Select(el => CloneElement(el)).ToList();
+                    var clonedElements = elementsToDuplicate.Select(el => ReplaceAndCloneElement(el, dictPeriod)).ToList();
 
                     // Created page
                     Paragraph pageSeparator = new Paragraph(new Run(new Break() { Type = BreakValues.Page }));
@@ -94,6 +94,24 @@ class Program
 
             }
         }
+    }
+
+    static OpenXmlElement ReplaceAndCloneElement(OpenXmlElement element, Dictionary<string, string> replacements)
+    {
+        var clonedElement = CloneElement(element);
+
+        foreach (var run in clonedElement.Descendants<Run>())
+        {
+            foreach (var text in run.Descendants<Text>())
+            {
+                foreach (var replacement in replacements)
+                {
+                    text.Text = text.Text.Replace(replacement.Key, replacement.Value);
+                }
+            }
+        }
+
+        return clonedElement;
     }
 
     static OpenXmlElement CloneElement(OpenXmlElement element)
