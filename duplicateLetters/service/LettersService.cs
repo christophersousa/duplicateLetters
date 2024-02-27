@@ -38,6 +38,16 @@ namespace duplicateLetters.service
                         .Where(el => el != startParagraph && el != endParagraph)
                         .ToList();
 
+                    var elementsToRemove = body.Elements()
+                        .SkipWhile(el => el != startParagraph)
+                        .TakeWhile(el => el != endParagraph)
+                        .ToList();
+                    // Remove the original block
+                    foreach (var elementToRemove in elementsToRemove)
+                    {
+                        elementToRemove.Remove();
+                    }
+
                     for (int i = 0; i < dataJson.Periodo.Count; i++)
                     {
                         Dictionary<string, string> dictPeriod = new Dictionary<string, string>
